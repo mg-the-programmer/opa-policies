@@ -22,16 +22,18 @@ https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
 tee /etc/apt/sources.list.d/hashicorp.list
 RUN apt update
 RUN apt-get install -y terraform
+RUN apt-get update && apt-get install -y unzip
 
 # AWS CLI
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "/tmp/awscliv2.zip"
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
 RUN unzip /tmp/awscliv2.zip -d /tmp
+RUN ls -l /tmp/aws
 RUN /tmp/aws/install
-RUN aws configure set region us-east-1
-RUN echo '[default]\n\
-aws_access_key_id = test\n\
-aws_secret_access_key = test' > /root/.aws/credentials
-
+RUN echo $PATH
+RUN ls -l /usr/local/bin/aws
+RUN aws --version
+RUN aws configure set region us-east-1 
+RUN echo -e '[default]\naws_access_key_id = AKIASJL533C60HUNKQFH\naws_secret_access_key = 8bjErLmeBlWEo9Y+I2DOzh1kil8wAT2PYKW4DB16' > /root/.aws/credentials
 # JENKINS CONFIGURATION
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 RUN jenkins-plugin-cli --verbose -f /usr/share/jenkins/ref/plugins.txt

@@ -10,7 +10,7 @@ pipeline {
         stage('Terraform plan') {
             steps {
                 echo 'Prepare Terraform plan in JSON file'
-                sh 'cd examples/aws/infra && terraform plan --out tfplan.binary'
+                sh 'cd examples/aws/infra && terraform plan --out=tfplan.binary'
                 sh 'cd examples/aws/infra && terraform show -json tfplan.binary > tfplan.json'
             }
         }
